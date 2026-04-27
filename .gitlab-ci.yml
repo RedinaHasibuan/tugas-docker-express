@@ -1,0 +1,15 @@
+stages:
+  - build
+  - deploy
+
+build_image:
+  stage: build
+  script:
+    - docker build -t gitlab-ci .
+
+deploy_container:
+  stage: deploy
+  script:
+    - docker stop container-gitlab-ci || true
+    - docker rm container-gitlab-ci || true
+    - docker run -d -p 3000:3000 --name container-gitlab-ci gitlab-ci
